@@ -20,8 +20,8 @@
 
 This is my personal portfolio, built to feel less like a template and more like a pit wall: telemetry-style readouts, a scroll tracker borrowed from F1 timing screens, and a little car that actually races across the bottom of the page as you scroll. Because why should race engineers have all the fun.
 
-**Live site:** _[add your deployed URL here]_
-**CV download:** `Emerald_Edward_CV.pdf` (bundled in this repo — keep it next to `index.html`!)
+**Live site:** _https://my-portfolio-psi-ten-92.vercel.app/_
+**CV download:** `Emerald_Edward_CV.pdf`
 
 ---
 
@@ -79,7 +79,6 @@ Any static host works — pick your team:
 - **Vercel** → `vercel deploy`
 - **Netlify** → drag the folder into the dashboard
 
-Just make sure `index.html` and `Emerald_Edward_CV.pdf` stay in the same directory — the download button links to the PDF by filename.
 
 ---
 
