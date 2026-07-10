@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emerald Edward — Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14171C;
+    --bg-alt:#1B1F26;
+    --bg-card:#1A1E25;
+    --text:#EDEAE3;
+    --text-dim:#9BA1AC;
+    --text-faint:#5C6270;
+    --red:#E6394A;
+    --teal:#4FD1C5;
+    --gold:#C9A227;
+    --line: rgba(237,234,227,0.10);
+    --line-strong: rgba(237,234,227,0.18);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--red);color:#fff;}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 40px;}
+  @media(max-width:700px){.wrap{padding:0 22px;}}
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible{outline:2px solid var(--teal);outline-offset:3px;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* ---------- RACE STRIP (scroll-driven car, signature motion element) ---------- */
+  .race-strip{
+    position:fixed;left:0;right:0;bottom:0;height:58px;
+    z-index:30;pointer-events:none;overflow:hidden;
+  }
+  .kerb{
+    position:absolute;left:0;right:0;bottom:14px;height:5px;
+    background-image:repeating-linear-gradient(90deg,
+      var(--red) 0 22px, var(--text) 22px 44px);
+    background-size:44px 5px;
+    opacity:0.55;
+    animation:kerb-scroll 1.6s linear infinite;
+  }
+  @keyframes kerb-scroll{ from{background-position-x:0;} to{background-position-x:-44px;} }
+  .race-car{
+    position:absolute;bottom:12px;left:0;
+    width:96px;height:auto;
+    will-change:transform;
+    filter:drop-shadow(0 4px 10px rgba(0,0,0,0.45));
+  }
+  .race-car .wheel{
+    transform-origin:center;
+    animation:wheel-spin 0.5s linear infinite;
+  }
+  @keyframes wheel-spin{ to{transform:rotate(360deg);} }
+  .race-car .trail{opacity:0.5;}
+
+  /* ---------- HERO CIRCUIT BACKDROP ---------- */
+  .hero{position:relative;}
+  .circuit-bg{
+    position:absolute;top:-10px;right:-30px;width:600px;max-width:66vw;height:auto;
+    pointer-events:none;z-index:0;
+  }
+  @media(max-width:900px){.circuit-bg{width:440px;max-width:78vw;top:10px;right:-90px;opacity:0.85;}}
+  @media(max-width:560px){.circuit-bg{display:none;}}
+  .hero > *:not(.circuit-bg){position:relative;z-index:1;}
+  .circuit-label{
+    font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.14em;
+    fill:var(--text-faint);text-transform:uppercase;
+  }
+  .track-dot{
+    offset-path: path("M40 300 C 40 240, 80 200, 140 200 L 300 200 C 340 200, 340 160, 310 140 L 260 100 C 230 78, 250 40, 300 40 L 460 40 C 520 40, 560 70, 560 120 C 560 170, 520 200, 470 200 L 430 200 C 400 200, 390 230, 410 255 L 460 300 C 490 330, 470 370, 430 370 L 120 370 C 70 370, 40 340, 40 300 Z");
+    offset-rotate:0deg;
+    animation-name:run-lap;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+    filter:drop-shadow(0 0 4px currentColor);
+  }
+  .track-dot.d1{animation-duration:7s; animation-delay:0s;}
+  .track-dot.d2{animation-duration:8.4s; animation-delay:-3s;}
+  .track-dot.d3{animation-duration:9.6s; animation-delay:-6s;}
+  @keyframes run-lap{
+    from{offset-distance:0%;}
+    to{offset-distance:100%;}
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(20,23,28,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    height:68px;
+  }
+  .logo{font-weight:700;font-size:1.05rem;display:flex;align-items:center;gap:8px;}
+  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 8px var(--red);}
+  .navlinks{display:flex;gap:32px;font-size:0.85rem;color:var(--text-dim);}
+  .navlinks a{transition:color .2s;}
+  .navlinks a:hover{color:var(--text);}
+  @media(max-width:700px){.navlinks{display:none;}}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 0;
+    position:relative;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--teal);
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:22px;
+  }
+  .eyebrow::before{content:'';width:24px;height:1px;background:var(--teal);}
+  .hero h1{
+    font-size:clamp(2.6rem,7vw,5.2rem);
+    font-weight:700;
+    line-height:0.98;
+    max-width:14ch;
+  }
+  .hero h1 em{
+    font-style:normal;color:var(--text-faint);
+    -webkit-text-stroke:1px var(--text-dim);
+    color:transparent;
+  }
+  .hero-sub{
+    margin-top:26px;
+    font-size:1.05rem;
+    color:var(--text-dim);
+    max-width:46ch;
+  }
+  .hero-cta{display:flex;gap:16px;margin-top:38px;flex-wrap:wrap;}
+  .btn{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.8rem;
+    padding:13px 22px;
+    border-radius:2px;
+    display:inline-flex;align-items:center;gap:10px;
+    transition:transform .2s, background .2s, color .2s;
+  }
+  .btn-primary{background:var(--red);color:#fff;}
+  .btn-primary:hover{transform:translateY(-2px);background:#f04b5c;}
+  .btn-ghost{border:1px solid var(--line-strong);color:var(--text);}
+  .btn-ghost:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-2px);}
+
+  /* ---------- SECTOR RAIL (signature element: F1 timing-screen scroll tracker) ---------- */
+  .sector-rail{
+    position:sticky;top:68px;z-index:45;
+    display:flex;
+    height:5px;
+    background:var(--bg-alt);
+    border-bottom:1px solid var(--line);
+  }
+  .sector-rail .segment{
+    flex:1;position:relative;
+    background:rgba(237,234,227,0.08);
+    transition:background .5s ease;
+  }
+  .sector-rail .segment + .segment{border-left:2px solid var(--bg);}
+  .sector-rail .segment.done{background:var(--teal);}
+  .sector-rail .segment.active{background:var(--red);box-shadow:0 0 10px 1px rgba(230,57,74,0.6);}
+  .sector-badge{
+    position:sticky;top:73px;z-index:44;
+    display:flex;justify-content:flex-end;
+    pointer-events:none;
+    height:0;
+  }
+  .sector-badge .inner{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem;letter-spacing:0.1em;
+    color:var(--text-faint);
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-top:none;
+    padding:5px 14px;
+    margin-left:auto;
+    display:table;
+  }
+  .sector-badge .inner b{color:var(--red);font-weight:600;}
+
+  /* ---------- SECTION HEADS ---------- */
+  section{padding:96px 0;}
+  .sec-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    margin-bottom:52px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:22px;
+    gap:20px;flex-wrap:wrap;
+  }
+  .sec-head h2{font-size:clamp(1.7rem,3.4vw,2.4rem);}
+  .sec-head .count{font-family:'JetBrains Mono',monospace;color:var(--text-faint);font-size:0.85rem;}
+
+  /* ---------- PROJECTS ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  @media(max-width:800px){.grid{grid-template-columns:1fr;}}
+  .card{
+    background:var(--bg-card);
+    padding:34px;
+    display:flex;flex-direction:column;gap:16px;
+    position:relative;
+    transition:background .25s;
+  }
+  .card:hover{background:#1F2430;}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+  .card h3{font-size:1.25rem;font-weight:600;}
+  .status{
+    font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;
+    padding:4px 9px;border:1px solid var(--line-strong);border-radius:20px;
+    display:flex;align-items:center;gap:6px;white-space:nowrap;color:var(--text-dim);
+  }
+  .status .led{width:5px;height:5px;border-radius:50%;background:var(--teal);}
+  .status.live .led{background:var(--red);box-shadow:0 0 6px var(--red);}
+  .card p{color:var(--text-dim);font-size:0.92rem;flex:1;}
+  .card-meta{
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--text-faint);
+    padding-top:14px;border-top:1px solid var(--line);
+  }
+  .lang{display:flex;align-items:center;gap:7px;}
+  .lang .sw{width:8px;height:8px;border-radius:50%;}
+  .card-links{display:flex;gap:16px;}
+  .card-links a{color:var(--teal);transition:color .2s;}
+  .card-links a:hover{color:var(--text);}
+
+  /* ---------- CV ---------- */
+  .cv-block{margin-bottom:38px;}
+  .cv-label{
+    font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.14em;
+    text-transform:uppercase;color:var(--text-faint);margin-bottom:18px;
+  }
+  .timeline{list-style:none;position:relative;padding-left:26px;}
+  .timeline::before{content:'';position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--line);}
+  .timeline li{position:relative;padding-bottom:24px;}
+  .timeline li:last-child{padding-bottom:0;}
+  .timeline li::before{
+    content:'';position:absolute;left:-26px;top:4px;width:9px;height:9px;border-radius:50%;
+    background:var(--bg);border:2px solid var(--teal);
+  }
+  .timeline li.current::before{border-color:var(--red);box-shadow:0 0 8px rgba(230,57,74,0.6);}
+  .timeline .role{font-weight:600;font-size:0.98rem;}
+  .timeline .org{color:var(--text-dim);font-size:0.88rem;margin-top:2px;}
+  .timeline .date{
+    font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--teal);
+    margin-top:6px;letter-spacing:0.03em;
+  }
+  .timeline li.current .date{color:var(--red);}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:70px;
+  }
+  @media(max-width:800px){.about-grid{grid-template-columns:1fr;gap:42px;}}
+  .about-grid p{color:var(--text-dim);margin-bottom:18px;max-width:52ch;}
+  .about-grid p:first-child{color:var(--text);font-size:1.15rem;font-family:'Space Grotesk',sans-serif;}
+  .readout{
+    font-family:'JetBrains Mono',monospace;font-size:0.85rem;
+    border:1px solid var(--line);
+  }
+  .readout-row{
+    display:flex;justify-content:space-between;padding:14px 20px;
+    border-bottom:1px solid var(--line);color:var(--text-dim);
+  }
+  .readout-row:last-child{border-bottom:none;}
+  .readout-row span:last-child{color:var(--text);}
+  .readout-head{
+    padding:12px 20px;background:var(--bg-alt);
+    font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-faint);
+    border-bottom:1px solid var(--line);
+  }
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:70px 0 100px;
+  }
+  .foot-top{
+    display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:30px;
+    margin-bottom:60px;
+  }
+  .foot-top h2{font-size:clamp(2rem,5vw,3.4rem);max-width:12ch;}
+  .foot-links{display:flex;flex-direction:column;gap:10px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;}
+  .foot-links a{color:var(--text-dim);transition:color .2s;display:flex;align-items:center;gap:8px;}
+  .foot-links a:hover{color:var(--teal);}
+  .foot-bottom{
+    display:flex;justify-content:space-between;color:var(--text-faint);
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;
+    padding-top:24px;border-top:1px solid var(--line);flex-wrap:wrap;gap:10px;
+  }
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="logo"><span class="dot"></span>EMERALD EDWARD</div>
+    <div class="navlinks">
+      <a href="#work">Work</a>
+      <a href="#cv">CV</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <a href="https://www.linkedin.com/in/emeraldedward" class="btn btn-ghost" style="padding:9px 16px;">LinkedIn ↗</a>
+      <a href="https://github.com/EmeraldKingg" class="btn btn-ghost" style="padding:9px 16px;">GitHub ↗</a>
+    </div>
+  </nav>
+</header>
+
+<div class="sector-rail" id="sectorRail"></div>
+<div class="sector-badge"><div class="inner" id="sectorBadge">SECTOR 1 <b>/</b> HERO</div></div>
+
+<div class="race-strip">
+  <div class="kerb"></div>
+  <svg class="race-car" id="raceCar" viewBox="0 0 220 90" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g class="trail">
+      <rect x="0" y="60" width="34" height="3" rx="1.5" fill="var(--teal)" opacity="0.5"/>
+      <rect x="8" y="68" width="24" height="3" rx="1.5" fill="var(--text-faint)" opacity="0.4"/>
+      <rect x="0" y="76" width="18" height="3" rx="1.5" fill="var(--text-faint)" opacity="0.3"/>
+    </g>
+    <rect x="40" y="52" width="150" height="10" rx="4" fill="#20252D"/>
+    <path d="M46 58 C 60 40, 100 36, 130 40 L 150 44 C 160 46, 165 52, 165 58 L 165 62 L 46 62 Z" fill="#262C36"/>
+    <path d="M78 44 C 92 34, 112 34, 122 42 L 118 52 L 82 52 Z" fill="var(--red)"/>
+    <rect x="150" y="30" width="46" height="8" rx="3" fill="#20252D"/>
+    <rect x="150" y="24" width="8" height="20" rx="2" fill="#20252D"/>
+    <path d="M40 54 L 20 50 L 20 58 L 40 60 Z" fill="var(--red)"/>
+    <circle class="wheel" cx="66" cy="66" r="15" fill="#14171C" stroke="var(--line-strong)" stroke-width="2"/>
+    <circle cx="66" cy="66" r="5" fill="var(--teal)"/>
+    <line class="wheel" x1="66" y1="53" x2="66" y2="79" stroke="var(--text-faint)" stroke-width="1.4" transform-origin="66 66"/>
+    <line class="wheel" x1="53" y1="66" x2="79" y2="66" stroke="var(--text-faint)" stroke-width="1.4" transform-origin="66 66"/>
+    <circle class="wheel" cx="160" cy="66" r="15" fill="#14171C" stroke="var(--line-strong)" stroke-width="2"/>
+    <circle cx="160" cy="66" r="5" fill="var(--red)"/>
+    <line class="wheel" x1="160" y1="53" x2="160" y2="79" stroke="var(--text-faint)" stroke-width="1.4" transform-origin="160 66"/>
+    <line class="wheel" x1="147" y1="66" x2="173" y2="66" stroke="var(--text-faint)" stroke-width="1.4" transform-origin="160 66"/>
+  </svg>
+</div>
+
+<main>
+  <section id="hero" class="hero wrap">
+    <svg class="circuit-bg" viewBox="0 0 600 420" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M40 300 C 40 240, 80 200, 140 200 L 300 200 C 340 200, 340 160, 310 140 L 260 100 C 230 78, 250 40, 300 40 L 460 40 C 520 40, 560 70, 560 120 C 560 170, 520 200, 470 200 L 430 200 C 400 200, 390 230, 410 255 L 460 300 C 490 330, 470 370, 430 370 L 120 370 C 70 370, 40 340, 40 300 Z"
+        stroke="var(--line-strong)" stroke-width="16" opacity="0.5"/>
+      <path d="M40 300 C 40 240, 80 200, 140 200 L 300 200 C 340 200, 340 160, 310 140 L 260 100 C 230 78, 250 40, 300 40 L 460 40 C 520 40, 560 70, 560 120 C 560 170, 520 200, 470 200 L 430 200 C 400 200, 390 230, 410 255 L 460 300 C 490 330, 470 370, 430 370 L 120 370 C 70 370, 40 340, 40 300 Z"
+        stroke="var(--teal)" stroke-width="1.6" stroke-dasharray="1 10" stroke-linecap="round" opacity="0.6"/>
+      <!-- start/finish line -->
+      <line x1="40" y1="288" x2="40" y2="312" stroke="var(--text)" stroke-width="4" stroke-dasharray="3 3" opacity="0.7"/>
+      <text x="56" y="304" class="circuit-label">SPIELBERG, AUSTRIA</text>
+      <text x="56" y="318" class="circuit-label" opacity="0.6">NEXT STOP · MSc</text>
+      <circle class="track-dot d1" r="4.5" fill="var(--red)" style="color:var(--red);"/>
+      <circle class="track-dot d2" r="4.5" fill="var(--teal)" style="color:var(--teal);"/>
+      <circle class="track-dot d3" r="4.5" fill="var(--gold)" style="color:var(--gold);"/>
+    </svg>
+    <div class="eyebrow">Software Engineer in the making</div>
+    <h1>Emerald Edward<br><em>builds things.</em></h1>
+    <p class="hero-sub">I write code the way other people collect hobbies, a telemetry tool for F1 lap data one week, a text-adventure through Westeros the next. Currently sharpening the fundamentals through FreeCodeCamp, one shipped project at a time.</p>
+    <div class="hero-cta">
+      <a href="#work" class="btn btn-primary">View the work</a>
+      <a href="Emerald_Edward_CV.pdf" download class="btn btn-ghost">Download CV ↓</a>
+      <a href="#contact" class="btn btn-ghost">Get in touch</a>
+    </div>
+  </section>
+
+  <section id="work" class="wrap">
+    <div class="sec-head reveal">
+      <h2>Selected work</h2>
+      <span class="count">08 projects — HTML · CSS · JS · Python</span>
+    </div>
+
+    <div class="grid reveal" id="projectGrid"></div>
+  </section>
+
+  <section id="cv" class="wrap">
+    <div class="sec-head reveal">
+      <h2>CV</h2>
+      <span class="count"><a href="Emerald_Edward_CV.pdf" download style="color:var(--teal);">↓ download_cv.pdf</a></span>
+    </div>
+
+    <div class="about-grid reveal">
+      <div>
+        <div class="cv-block">
+          <div class="cv-label">Experience</div>
+          <ol class="timeline" id="expTimeline"></ol>
+        </div>
+        <div class="cv-block">
+          <div class="cv-label">Education</div>
+          <ol class="timeline" id="eduTimeline"></ol>
+        </div>
+      </div>
+
+      <div>
+        <div class="readout" style="margin-bottom:20px;">
+          <div class="readout-head">skills.log</div>
+          <div class="readout-row"><span>Python</span><span>●●●●○</span></div>
+          <div class="readout-row"><span>Data Analysis</span><span>●●●○○</span></div>
+          <div class="readout-row"><span>Web Services API</span><span>●●●○○</span></div>
+        </div>
+        <div class="readout" style="margin-bottom:20px;">
+          <div class="readout-head">languages.log</div>
+          <div class="readout-row"><span>English</span><span>Native / Bilingual</span></div>
+          <div class="readout-row"><span>Ga</span><span>Native / Bilingual</span></div>
+          <div class="readout-row"><span>Twi</span><span>Limited Working</span></div>
+          <div class="readout-row"><span>Spanish</span><span>Elementary</span></div>
+        </div>
+        <div class="readout">
+          <div class="readout-head">certifications.log</div>
+          <div class="readout-row"><span>Responsive Web Design</span><span>freeCodeCamp</span></div>
+          <div class="readout-row"><span>Legacy RWD V8</span><span>freeCodeCamp</span></div>
+        </div>
+        <a href="Emerald_Edward_CV.pdf" download class="btn btn-primary" style="margin-top:24px;width:100%;justify-content:center;">Download full CV (PDF) ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="wrap">
+    <div class="sec-head">
+      <h2>About</h2>
+      <span class="count">profile</span>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p>Future software engineer, currently learning through FreeCodeCamp, passionate about web development, problem-solving, and creativity.</p>
+        <p>The projects range wide on purpose: a Python tool comparing F1 telemetry between Verstappen and Norris, an object-oriented text adventure set in Westeros, a scraper that pulls structured data off the web, and a handful of front-end builds for a fictional record label and a fictional creative studio. Different domains, same habit, pick something interesting, then build it end to end.</p>
+      </div>
+      <div class="readout">
+        <div class="readout-head">github_stats.log</div>
+        <div class="readout-row"><span>public_repos</span><span>11</span></div>
+        <div class="readout-row"><span>primary_languages</span><span>Python, JS, HTML, CSS</span></div>
+        <div class="readout-row"><span>learning_platform</span><span>FreeCodeCamp</span></div>
+        <div class="readout-row"><span>latest_push</span><span>INSEL</span></div>
+        <div class="readout-row"><span>focus</span><span>web dev · problem-solving</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-top">
+      <h2>Let's build something.</h2>
+      <div class="foot-links">
+        <a href="https://github.com/EmeraldKingg">→ github.com/EmeraldKingg</a>
+        <a href="https://www.linkedin.com/in/emeraldedward">→ linkedin.com/in/emeraldedward</a>
+        <a href="mailto:emeraldedwards01@gmail.com">→ emeraldedwards01@gmail.com</a>
+        <a href="Emerald_Edward_CV.pdf" download>→ download CV (PDF)</a>
+      </div>
+    </div>
+    <div class="foot-bottom wrap" style="padding-left:0;padding-right:0;">
+      <span>© 2026 Emerald Edward</span>
+      <span>Built with HTML, CSS &amp; a lot of curiosity</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const projects = [
+    {
+      name:"INSEL",
+      desc:"A redesigned digital experience concept for Insel — brand campaigns, creative capabilities, and portfolio told through a modern, storytelling-driven site.",
+      lang:"HTML", color:"var(--red)",
+      status:"live", statusLabel:"LIVE",
+      links:[["Site","https://insel-phi.vercel.app"],["Code","https://github.com/EmeraldKingg/INSEL"]]
+    },
+    {
+      name:"Max vs Norris — Monza GP 2025",
+      desc:"A Python data-analysis tool that extracts and visualizes F1 telemetry — comparing braking points and throttle application to explain the lap-time gap.",
+      lang:"Python", color:"var(--teal)",
+      status:"", statusLabel:"DEPLOYED",
+      links:[["Code","https://github.com/EmeraldKingg/Max_vs_Norris_Monza_GP_2025"]]
+    },
+    {
+      name:"misschief records",
+      desc:"Bold, artistic website for a fictional record label — built with HTML, CSS, and JavaScript.",
+      lang:"CSS", color:"var(--gold)",
+      status:"live", statusLabel:"LIVE",
+      links:[["Site","https://emeraldkingg.github.io/misschief-records/"],["Code","https://github.com/EmeraldKingg/misschief-records"]]
+    },
+    {
+      name:"Trybrid",
+      desc:"A responsive movie site — browse titles, view details, and watch trailers, powered by an external API with a clean semantic layout.",
+      lang:"JavaScript", color:"var(--teal)",
+      status:"", statusLabel:"DEPLOYED",
+      links:[["Code","https://github.com/EmeraldKingg/Trybrid"]]
+    },
+    {
+      name:"Game of Thrones — Python Game",
+      desc:"An object-oriented text adventure set in Westeros — navigate the Seven Kingdoms, manage an inventory, and claim the Iron Throne.",
+      lang:"Python", color:"var(--teal)",
+      status:"", statusLabel:"DEPLOYED",
+      links:[["Code","https://github.com/EmeraldKingg/Game-of-Thrones_PythonGame"]]
+    },
+    {
+      name:"Web Scraper Project",
+      desc:"A Python scraper that pulls and structures data from the web for further analysis.",
+      lang:"Python", color:"var(--teal)",
+      status:"", statusLabel:"DEPLOYED",
+      links:[["Code","https://github.com/EmeraldKingg/webscraper_project"]]
+    },
+    {
+      name:"Formula One Landing Page",
+      desc:"A responsive Formula 1 landing page covering teams, drivers, and race info — the FreeCodeCamp Product Landing Page challenge.",
+      lang:"HTML", color:"var(--red)",
+      status:"live", statusLabel:"LIVE",
+      links:[["Code","https://github.com/EmeraldKingg/Formula-One-landing-page-freecodecamp-project-"]]
+    },
+    {
+      name:"Engfa Waraha — Tribute Page",
+      desc:"A FreeCodeCamp Responsive Web Design tribute page — semantic HTML and accessible, responsive CSS layout.",
+      lang:"HTML", color:"var(--red)",
+      status:"live", statusLabel:"LIVE",
+      links:[["Code","https://github.com/EmeraldKingg/Engfa-Waraha-Tribute-Page-freecodecamp-"]]
+    }
+  ];
+
+  const grid = document.getElementById('projectGrid');
+  grid.innerHTML = projects.map(p => `
+    <div class="card">
+      <div class="card-top">
+        <h3>${p.name}</h3>
+        <span class="status ${p.status}"><span class="led"></span>${p.statusLabel}</span>
+      </div>
+      <p>${p.desc}</p>
+      <div class="card-meta">
+        <span class="lang"><span class="sw" style="background:${p.color}"></span>${p.lang}</span>
+        <span class="card-links">${p.links.map(l => `<a href="${l[1]}" target="_blank" rel="noopener">${l[0]} ↗</a>`).join('')}</span>
+      </div>
+    </div>
+  `).join('');
+
+  // ---- CV data ----
+  const experience = [
+    {role:"Student", org:"IPMC Training", date:"Feb 2026 — Present", current:true},
+    {role:"Web Developer", org:"Freelance, Accra", date:"Mar 2025 — Present", current:true},
+    {role:"Social Media Manager", org:"Freelance, Accra", date:"Mar 2025 — Present", current:true},
+    {role:"Client Services Representative", org:"The Gold Coast Report, Accra", date:"Apr 2025 — Aug 2025"},
+    {role:"Administrative Assistant / Social Media Manager", org:"Fika Teahouse, Accra", date:"Nov 2022 — Mar 2025"},
+    {role:"Administrative Assistant", org:"Global Plus Ghana Limited, Accra", date:"May 2022 — Nov 2022"},
+  ];
+  const education = [
+    {role:"B.A. Computing with Business Management", org:"IPMC University College", date:"Feb 2026 — Feb 2028", current:true},
+    {role:"Diploma, Computer Software Engineering", org:"IPMC University College", date:"Jan 2021 — May 2022"},
+    {role:"High School Diploma, Accounting & Business/Management", org:"Accra Girls Senior High School", date:"Nov 2016 — Jul 2019"},
+  ];
+  const renderTimeline = (id, items) => {
+    document.getElementById(id).innerHTML = items.map(i => `
+      <li class="${i.current ? 'current' : ''}">
+        <div class="role">${i.role}</div>
+        <div class="org">${i.org}</div>
+        <div class="date">${i.date}</div>
+      </li>`).join('');
+  };
+  renderTimeline('expTimeline', experience);
+  renderTimeline('eduTimeline', education);
+
+  // ---- Sector rail: F1 timing-screen style scroll tracker ----
+  const sectorSections = [
+    {id:'hero', label:'HERO'},
+    {id:'work', label:'WORK'},
+    {id:'cv', label:'CV'},
+    {id:'about', label:'ABOUT'},
+    {id:'contact', label:'CONTACT'},
+  ];
+  const rail = document.getElementById('sectorRail');
+  rail.innerHTML = sectorSections.map((s,i) => `<div class="segment" data-idx="${i}"></div>`).join('');
+  const segments = rail.querySelectorAll('.segment');
+  const badge = document.getElementById('sectorBadge');
+
+  const updateRail = () => {
+    let activeIdx = 0;
+    const scrollPos = window.scrollY + window.innerHeight * 0.35;
+    sectorSections.forEach((s, i) => {
+      const el = document.getElementById(s.id);
+      if (el && el.offsetTop <= scrollPos) activeIdx = i;
+    });
+    segments.forEach((seg, i) => {
+      seg.classList.remove('done','active');
+      if (i < activeIdx) seg.classList.add('done');
+      else if (i === activeIdx) seg.classList.add('active');
+    });
+    badge.innerHTML = `SECTOR ${activeIdx+1} <b>/</b> ${sectorSections[activeIdx].label}`;
+  };
+  window.addEventListener('scroll', updateRail, {passive:true});
+  window.addEventListener('resize', updateRail);
+  updateRail();
+
+  // ---- Race car: travels the width of the screen as you scroll the page ----
+  const raceCar = document.getElementById('raceCar');
+  const moveCar = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const frac = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+    const trackWidth = window.innerWidth - 96 - 12;
+    raceCar.style.transform = `translateX(${frac * trackWidth}px)`;
+  };
+  window.addEventListener('scroll', moveCar, {passive:true});
+  window.addEventListener('resize', moveCar);
+  moveCar();
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, {threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
