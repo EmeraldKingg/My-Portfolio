@@ -149,6 +149,17 @@
     color:var(--text-dim);
     max-width:46ch;
   }
+  .hero-value{
+    margin-top:20px;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:clamp(1.1rem,2.4vw,1.4rem);
+    font-weight:600;
+    color:var(--text);
+    max-width:38ch;
+    padding-left:16px;
+    border-left:3px solid var(--red);
+  }
+  .hero-value span{color:var(--teal);}
   .hero-cta{display:flex;gap:16px;margin-top:38px;flex-wrap:wrap;}
   .btn{
     font-family:'JetBrains Mono',monospace;
@@ -247,6 +258,31 @@
   .card-links{display:flex;gap:16px;}
   .card-links a{color:var(--teal);transition:color .2s;}
   .card-links a:hover{color:var(--text);}
+
+  .card.featured{grid-column:1/-1;padding:44px;}
+  @media(max-width:700px){.card.featured{padding:30px;}}
+  .featured-tag{
+    font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:0.14em;
+    text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:8px;
+  }
+  .featured-tag::before{content:'';width:18px;height:1px;background:var(--red);}
+  .card.featured h3{font-size:1.6rem;margin-top:6px;}
+  .card-narrative{color:var(--text-dim);font-size:0.98rem;max-width:70ch;}
+  .cs-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:20px 32px;margin-top:6px;
+  }
+  @media(max-width:700px){.cs-grid{grid-template-columns:1fr;}}
+  .cs-item .cs-label{
+    font-family:'JetBrains Mono',monospace;font-size:0.66rem;letter-spacing:0.12em;
+    text-transform:uppercase;color:var(--text-faint);margin-bottom:6px;
+  }
+  .cs-item .cs-value{color:var(--text-dim);font-size:0.87rem;line-height:1.5;}
+  .tech-chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    font-family:'JetBrains Mono',monospace;font-size:0.68rem;
+    padding:4px 11px;border:1px solid var(--line-strong);border-radius:20px;
+    color:var(--text-dim);
+  }
 
   /* ---------- CV ---------- */
   .cv-block{margin-bottom:38px;}
@@ -381,7 +417,8 @@
     </svg>
     <div class="eyebrow">Software Engineer in the making</div>
     <h1>Emerald Edward<br><em>builds things.</em></h1>
-    <p class="hero-sub">I write code the way other people collect hobbies, a telemetry tool for F1 lap data one week, a text-adventure through Westeros the next. Currently sharpening the fundamentals through FreeCodeCamp, one shipped project at a time.</p>
+    <p class="hero-value">Web Developer crafting <span>clean, responsive front-ends</span> with a computing student's curiosity.</p>
+    <p class="hero-sub">From an F1 telemetry breakdown to a Game of Thrones text adventure, I pick something curious and ship it end to end. Currently sharpening the fundamentals through FreeCodeCamp.</p>
     <div class="hero-cta">
       <a href="#work" class="btn btn-primary">View the work</a>
       <a href="Emerald_Edward_CV.pdf" download class="btn btn-ghost">Download CV ↓</a>
@@ -392,7 +429,7 @@
   <section id="work" class="wrap">
     <div class="sec-head reveal">
       <h2>Selected work</h2>
-      <span class="count">08 projects — HTML · CSS · JS · Python</span>
+      <span class="count">08 case studies — HTML · CSS · JS · Python</span>
     </div>
 
     <div class="grid reveal" id="projectGrid"></div>
@@ -447,16 +484,23 @@
     </div>
     <div class="about-grid">
       <div>
-        <p>Future software engineer, currently learning through FreeCodeCamp, passionate about web development, problem-solving, and creativity.</p>
-        <p>The projects range wide on purpose: a Python tool comparing F1 telemetry between Verstappen and Norris, an object-oriented text adventure set in Westeros, a scraper that pulls structured data off the web, and a handful of front-end builds for a fictional record label and a fictional creative studio. Different domains, same habit, pick something interesting, then build it end to end.</p>
+        <p>I'm a Computing student who cares less about "what tech I used" and more about why a build works, I'm drawn to front-end engineering because it sits right at the intersection of design and logic, and I like the immediate feedback loop of shipping something people can actually click through.</p>
+        <p>That's steadily pulling me toward software engineering and cybersecurity more broadly. Long-term, I'm working toward a Master's in Austria to take that interest somewhere with a stronger international footing, in the meantime, I build small, finished things instead of waiting until I feel "ready."</p>
       </div>
-      <div class="readout">
-        <div class="readout-head">github_stats.log</div>
-        <div class="readout-row"><span>public_repos</span><span>11</span></div>
-        <div class="readout-row"><span>primary_languages</span><span>Python, JS, HTML, CSS</span></div>
-        <div class="readout-row"><span>learning_platform</span><span>FreeCodeCamp</span></div>
-        <div class="readout-row"><span>latest_push</span><span>INSEL</span></div>
-        <div class="readout-row"><span>focus</span><span>web dev · problem-solving</span></div>
+      <div>
+        <div class="readout" style="margin-bottom:20px;">
+          <div class="readout-head">skills.log</div>
+          <div class="readout-row"><span>Frontend</span><span>HTML · CSS · JavaScript</span></div>
+          <div class="readout-row"><span>Programming</span><span>Python · Data Analysis</span></div>
+          <div class="readout-row"><span>Tools</span><span>Git · GitHub · VS Code</span></div>
+          <div class="readout-row"><span>Growing into</span><span>React · Cybersecurity</span></div>
+        </div>
+        <div class="readout">
+          <div class="readout-head">github_stats.log</div>
+          <div class="readout-row"><span>public_repos</span><span>11</span></div>
+          <div class="readout-row"><span>latest_push</span><span>INSEL</span></div>
+          <div class="readout-row"><span>focus</span><span>frontend · problem-solving</span></div>
+        </div>
       </div>
     </div>
   </section>
@@ -465,7 +509,11 @@
 <footer id="contact">
   <div class="wrap">
     <div class="foot-top">
-      <h2>Let's build something.</h2>
+      <div>
+        <div class="status live" style="margin-bottom:18px;display:inline-flex;"><span class="led"></span>OPEN TO WORK</div>
+        <h2>Let's build something.</h2>
+        <p style="color:var(--text-dim);margin-top:14px;max-width:40ch;">Currently available for internships, freelance work, and junior front-end roles.</p>
+      </div>
       <div class="foot-links">
         <a href="https://github.com/EmeraldKingg">→ github.com/EmeraldKingg</a>
         <a href="https://www.linkedin.com/in/emeraldedward">→ linkedin.com/in/emeraldedward</a>
@@ -474,86 +522,141 @@
       </div>
     </div>
     <div class="foot-bottom wrap" style="padding-left:0;padding-right:0;">
-      <span>© 2026 Emerald Edward</span>
+      <span>Designed &amp; built by Emerald Edward</span>
       <span>Built with HTML, CSS &amp; a lot of curiosity</span>
     </div>
   </div>
 </footer>
 
 <script>
+  const featuredProject = {
+    name:"INSEL",
+    tag:"Unsolicited redesign concept",
+    narrative:"INSEL wasn't a brief, it was an experiment. I picked a real creative agency's site and asked: what would this look like with a cleaner information hierarchy and more immersive, storytelling-led visuals? Then I built the answer.",
+    challenge:"The source site leaned heavily on dense text blocks to describe the agency's campaign work, which buried the actual creative output under paragraphs.",
+    goal:"Rebuild the experience around visual storytelling, let the work speak first, with copy supporting rather than leading.",
+    tech:["HTML","CSS","JavaScript","Vercel"],
+    learned:"How much a restructured content hierarchy (visuals-first, text-second) changes the perceived quality of the same underlying work.",
+    status:"live", statusLabel:"LIVE",
+    links:[["Live site","https://insel-phi.vercel.app"],["Code","https://github.com/EmeraldKingg/INSEL"]]
+  };
+
   const projects = [
     {
-      name:"INSEL",
-      desc:"A redesigned digital experience concept for Insel — brand campaigns, creative capabilities, and portfolio told through a modern, storytelling-driven site.",
-      lang:"HTML", color:"var(--red)",
-      status:"live", statusLabel:"LIVE",
-      links:[["Site","https://insel-phi.vercel.app"],["Code","https://github.com/EmeraldKingg/INSEL"]]
-    },
-    {
       name:"Max vs Norris — Monza GP 2025",
-      desc:"A Python data-analysis tool that extracts and visualizes F1 telemetry — comparing braking points and throttle application to explain the lap-time gap.",
+      challenge:"Lap-time deltas between two drivers are easy to see but hard to explain without digging into the underlying telemetry.",
+      goal:"Build a Python tool that pulls session data and visualizes braking points and throttle traces side by side, so the 'why' behind the gap is visible, not just the number.",
+      tech:["Python","Pandas","Matplotlib"],
+      learned:"How to work with real F1 telemetry data and turn a wall of numbers into a chart that actually tells a story.",
       lang:"Python", color:"var(--teal)",
       status:"", statusLabel:"DEPLOYED",
       links:[["Code","https://github.com/EmeraldKingg/Max_vs_Norris_Monza_GP_2025"]]
     },
     {
       name:"misschief records",
-      desc:"Bold, artistic website for a fictional record label — built with HTML, CSS, and JavaScript.",
+      challenge:"Record-label sites often default to generic templates that undersell the artists on the roster.",
+      goal:"Design something bolder, a layout with more personality that still feels usable and responsive.",
+      tech:["HTML","CSS","JavaScript"],
+      learned:"How far you can push visual identity before it starts working against usability, and where the line is.",
       lang:"CSS", color:"var(--gold)",
       status:"live", statusLabel:"LIVE",
       links:[["Site","https://emeraldkingg.github.io/misschief-records/"],["Code","https://github.com/EmeraldKingg/misschief-records"]]
     },
     {
       name:"Trybrid",
-      desc:"A responsive movie site — browse titles, view details, and watch trailers, powered by an external API with a clean semantic layout.",
+      challenge:"Movie discovery sites can feel cluttered fast once you add posters, trailers, and metadata to one page.",
+      goal:"Keep the layout clean while pulling live data from an external movie API for details and trailers.",
+      tech:["JavaScript","REST API","HTML/CSS"],
+      learned:"Handling asynchronous API data gracefully — loading states, missing fields, and keeping the UI calm regardless of what comes back.",
       lang:"JavaScript", color:"var(--teal)",
       status:"", statusLabel:"DEPLOYED",
       links:[["Code","https://github.com/EmeraldKingg/Trybrid"]]
     },
     {
       name:"Game of Thrones — Python Game",
-      desc:"An object-oriented text adventure set in Westeros — navigate the Seven Kingdoms, manage an inventory, and claim the Iron Throne.",
+      challenge:"Text adventures live or die on state management, the player's inventory, location, and choices all have to stay consistent.",
+      goal:"Build an object-oriented Westeros adventure where the player navigates the Seven Kingdoms toward the Iron Throne.",
+      tech:["Python","OOP"],
+      learned:"How object-oriented design keeps branching game logic manageable instead of turning into a pile of if-statements.",
       lang:"Python", color:"var(--teal)",
       status:"", statusLabel:"DEPLOYED",
       links:[["Code","https://github.com/EmeraldKingg/Game-of-Thrones_PythonGame"]]
     },
     {
       name:"Web Scraper Project",
-      desc:"A Python scraper that pulls and structures data from the web for further analysis.",
+      challenge:"Raw HTML from a live page is messy, the useful data is buried in tags that change from page to page.",
+      goal:"Write a Python scraper that reliably extracts and structures that data for further analysis.",
+      tech:["Python","BeautifulSoup"],
+      learned:"How fragile scraping can be against real-world markup, and why defensive parsing matters.",
       lang:"Python", color:"var(--teal)",
       status:"", statusLabel:"DEPLOYED",
       links:[["Code","https://github.com/EmeraldKingg/webscraper_project"]]
     },
     {
       name:"Formula One Landing Page",
-      desc:"A responsive Formula 1 landing page covering teams, drivers, and race info — the FreeCodeCamp Product Landing Page challenge.",
+      challenge:"Fit teams, drivers, and race info onto one landing page without it feeling like a wall of information.",
+      goal:"Complete the FreeCodeCamp Product Landing Page challenge with an F1-themed, fully responsive layout.",
+      tech:["HTML","CSS"],
+      learned:"Responsive layout fundamentals, flexbox, breakpoints, and structuring a page that holds up on any screen size.",
       lang:"HTML", color:"var(--red)",
       status:"live", statusLabel:"LIVE",
       links:[["Code","https://github.com/EmeraldKingg/Formula-One-landing-page-freecodecamp-project-"]]
     },
     {
       name:"Engfa Waraha — Tribute Page",
-      desc:"A FreeCodeCamp Responsive Web Design tribute page — semantic HTML and accessible, responsive CSS layout.",
+      challenge:"A tribute page needs to feel personal and well-organized with just semantic HTML and CSS, no JavaScript crutches.",
+      goal:"Complete the FreeCodeCamp Responsive Web Design tribute page challenge with clean, accessible markup.",
+      tech:["HTML","CSS"],
+      learned:"The value of semantic HTML for accessibility and structure, even on a simple single-page site.",
       lang:"HTML", color:"var(--red)",
       status:"live", statusLabel:"LIVE",
       links:[["Code","https://github.com/EmeraldKingg/Engfa-Waraha-Tribute-Page-freecodecamp-"]]
     }
   ];
 
-  const grid = document.getElementById('projectGrid');
-  grid.innerHTML = projects.map(p => `
+  const chips = tech => tech.map(t => `<span class="chip">${t}</span>`).join('');
+
+  const featuredCard = `
+    <div class="card featured">
+      <div class="card-top">
+        <div>
+          <div class="featured-tag">${featuredProject.tag}</div>
+          <h3>${featuredProject.name}</h3>
+        </div>
+        <span class="status ${featuredProject.status}"><span class="led"></span>${featuredProject.statusLabel}</span>
+      </div>
+      <p class="card-narrative">${featuredProject.narrative}</p>
+      <div class="cs-grid">
+        <div class="cs-item"><div class="cs-label">Challenge</div><div class="cs-value">${featuredProject.challenge}</div></div>
+        <div class="cs-item"><div class="cs-label">Goal</div><div class="cs-value">${featuredProject.goal}</div></div>
+        <div class="cs-item"><div class="cs-label">Technologies</div><div class="tech-chips">${chips(featuredProject.tech)}</div></div>
+        <div class="cs-item"><div class="cs-label">What I learned</div><div class="cs-value">${featuredProject.learned}</div></div>
+      </div>
+      <div class="card-meta" style="border-top:1px solid var(--line);">
+        <span></span>
+        <span class="card-links">${featuredProject.links.map(l => `<a href="${l[1]}" target="_blank" rel="noopener">${l[0]} ↗</a>`).join('')}</span>
+      </div>
+    </div>`;
+
+  const standardCards = projects.map(p => `
     <div class="card">
       <div class="card-top">
         <h3>${p.name}</h3>
         <span class="status ${p.status}"><span class="led"></span>${p.statusLabel}</span>
       </div>
-      <p>${p.desc}</p>
+      <div class="cs-item"><div class="cs-label">Challenge</div><div class="cs-value">${p.challenge}</div></div>
+      <div class="cs-item"><div class="cs-label">Goal</div><div class="cs-value">${p.goal}</div></div>
+      <div class="cs-item"><div class="cs-label">What I learned</div><div class="cs-value">${p.learned}</div></div>
+      <div class="tech-chips">${chips(p.tech)}</div>
       <div class="card-meta">
         <span class="lang"><span class="sw" style="background:${p.color}"></span>${p.lang}</span>
         <span class="card-links">${p.links.map(l => `<a href="${l[1]}" target="_blank" rel="noopener">${l[0]} ↗</a>`).join('')}</span>
       </div>
     </div>
   `).join('');
+
+  const grid = document.getElementById('projectGrid');
+  grid.innerHTML = featuredCard + standardCards;
 
   // ---- CV data ----
   const experience = [
