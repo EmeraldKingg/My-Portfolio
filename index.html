@@ -429,7 +429,7 @@
   <section id="work" class="wrap">
     <div class="sec-head reveal">
       <h2>Selected work</h2>
-      <span class="count">08 case studies — HTML · CSS · JS · Python</span>
+      <span class="count">10 case studies — HTML · CSS · JS · Python · Agents</span>
     </div>
 
     <div class="grid reveal" id="projectGrid"></div>
@@ -497,8 +497,8 @@
         </div>
         <div class="readout">
           <div class="readout-head">github_stats.log</div>
-          <div class="readout-row"><span>public_repos</span><span>11</span></div>
-          <div class="readout-row"><span>latest_push</span><span>INSEL</span></div>
+          <div class="readout-row"><span>public_repos</span><span>20</span></div>
+          <div class="readout-row"><span>latest_push</span><span>pit-wall</span></div>
           <div class="readout-row"><span>focus</span><span>frontend · problem-solving</span></div>
         </div>
       </div>
@@ -530,18 +530,38 @@
 
 <script>
   const featuredProject = {
-    name:"INSEL",
-    tag:"Unsolicited redesign concept",
-    narrative:"INSEL wasn't a brief — it was an experiment. I picked a real creative agency's site and asked: what would this look like with a cleaner information hierarchy and more immersive, storytelling-led visuals? Then I built the answer.",
-    challenge:"The source site leaned heavily on dense text blocks to describe the agency's campaign work, which buried the actual creative output under paragraphs.",
-    goal:"Rebuild the experience around visual storytelling — let the work speak first, with copy supporting rather than leading.",
-    tech:["HTML","CSS","JavaScript","Vercel"],
-    learned:"How much a restructured content hierarchy (visuals-first, text-second) changes the perceived quality of the same underlying work.",
-    status:"live", statusLabel:"LIVE",
-    links:[["Live site","https://insel-tau.vercel.app/"],["Code","https://github.com/EmeraldKingg/INSEL"]]
+    name:"Pit Wall",
+    tag:"Agentic Cinema hackathon — Grafana partner track",
+    narrative:"During a live race broadcast, a production team watches dozens of Grafana panels — car telemetry, stream bitrate, feed uptime — and manually decides when something needs a producer's attention. Pit Wall is an autonomous broadcast-ops agent that watches those feeds itself, then annotates the live dashboard and explains what happened in plain English.",
+    challenge:"Doing that job under live pressure is slow and error-prone, and handing the whole thing to an LLM makes it unpredictable — exactly what you don't want during a broadcast.",
+    goal:"Split the work: a deterministic rules layer decides whether something is an anomaly, and a Gemini agent decides what to do about it and how to communicate it. Detection stays testable; judgment goes to the model.",
+    tech:["Python","Gemini","Google ADK","Grafana MCP","Prometheus","Docker"],
+    learned:"Where the line sits between rules and model in an agentic system — and how to wire an agent to real services (Grafana Cloud, Prometheus remote_write) so it makes live runtime calls instead of faking them.",
+    status:"", statusLabel:"SUBMITTED",
+    links:[["Code","https://github.com/EmeraldKingg/pit-wall"]]
   };
 
   const projects = [
+    {
+      name:"reg26 — FIA 2026 Power Unit Regulations",
+      challenge:"Most F1 fan projects stop at layout and copy — they look like they understand the sport without being correct about it.",
+      goal:"Turn the FIA's 2026 technical regulations into a working model: an Energy Deployment Strategist that lets you allocate a lap's energy budget across track segments under the real 350 kW / 250 kW power caps and per-lap energy limits.",
+      tech:["HTML","CSS","JavaScript"],
+      learned:"How to build sliders that live-clamp against two competing constraints at once, and why publishing a sourced-vs-modelled methodology table matters more than hiding the seams.",
+      lang:"HTML", color:"var(--red)",
+      status:"", statusLabel:"DEPLOYED",
+      links:[["Code","https://github.com/EmeraldKingg/FIA26-A-Regulation-Modeled"]]
+    },
+    {
+      name:"INSEL",
+      challenge:"The source site leaned heavily on dense text blocks to describe the agency's campaign work, which buried the actual creative output under paragraphs.",
+      goal:"Rebuild the experience around visual storytelling — let the work speak first, with copy supporting rather than leading.",
+      tech:["HTML","CSS","JavaScript","Vercel"],
+      learned:"How much a restructured content hierarchy (visuals-first, text-second) changes the perceived quality of the same underlying work.",
+      lang:"HTML", color:"var(--gold)",
+      status:"live", statusLabel:"LIVE",
+      links:[["Live site","https://insel-tau.vercel.app/"],["Code","https://github.com/EmeraldKingg/INSEL"]]
+    },
     {
       name:"Max vs Norris — Monza GP 2025",
       challenge:"Lap-time deltas between two drivers are easy to see but hard to explain without digging into the underlying telemetry.",
